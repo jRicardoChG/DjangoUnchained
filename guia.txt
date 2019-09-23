@@ -1,0 +1,15 @@
+Hola aca explico en español como crear un projecto en Django en caso de que lo olvide
+
+0. instalo Django
+    sudo pip3 install Django
+1. creo el projecto en una carpeta limpia
+    django-admin startproject projectname
+2. esto crea un projecto completo, debo crear una app especifica dentro del proyecto
+    python manage.py startapp appname
+3. En la app debo crear un archivo urls.py para indicar las urls propias de la aplicacion, Django puede tener muchas aplicaciones al tiempo.
+4. asocio estas urls.py de la app especifica con la del projecto general, importo la libreria include en el urls.py del proyecto general
+5. corro la aplicacion desde la carpeta del proyecto
+    python3 manage.py runserver
+    
+
+
