@@ -3,6 +3,7 @@ from django.db import models
 # la app modelo la creare con el ejemplo de la tarea 2, la base de datos de la apgina de libros y las reviews
 # esta base de datos tiene 3 tablas: usuarios, libros y reviews, mas adelante vere como asociar los regsitros de login de Django con esta base de datos 
 # Create your models here.
+# Requisitos: sudo pip3 install django psycopg2-binary
 # para crear las tablas en la base de datos se debe:
 # 1. Crear el modelo correctmaente en el archivo models.py
 # 2. crear ma migracion django python3 manage.py makemigrations;  lo cual cre aun archivo xxxx_initial.py
@@ -11,6 +12,7 @@ from django.db import models
 # se puedencrear elelmentos en la base de datos usando la shell de django python3 manage.py shell
 # codigos para crear:
 # from App01.models import libros   <----tabla
+
 #  
 # f = libros(titulo = principito, autor=alguien,ISBN=1234567,fecha=hoy)
 # f.save()
@@ -37,6 +39,7 @@ class libros(models.Model):
 class reviews(models.Model):
     dueno = models.ForeignKey(usuarios,on_delete=models.CASCADE, related_name="duenoReview")
     libro = models.ForeignKey(libros, on_delete=models.CASCADE, related_name="tituloLibro")
+    review = models.CharField(max_length=256,null=True)
 
     def __str__(self):
         return f"REVIEW dueno: {self.dueno},libro: {self.libro}"

@@ -1,0 +1,140 @@
+--en este archivo voy a ahcer algunos ejericios de bases de datos, ejericicos relacionaes y voy a crear los modelos de las mismas
+-- https://gestionbasesdatos.readthedocs.io/es/latest/Tema2/Actividades.html ejericcios de bases de datos
+--1. ejericicio : caso uno a uno
+--Tengo 2 tablas: presidente y pais, un unico presenten para un unico pais
+--Para que esto suceda las dos tblas deben tener la llave primaria correspondiente de la otra, un contraint no se puede definir si no esta definida esta columna
+
+-- relaciones uno a uno no se deben definir 
+--Codigo SQL para crear estas tablas:
+
+create table presidentes(
+    id_pais             int primary key,
+    id_presidente       int primary key,
+    nombre_presidente   varchar(128),
+    constraint fk_pais foreign key (id_pais) references paises (id_pais)
+);
+
+create table paises(
+    id_pais             int primary key,
+    id_presidente       int primary key, 
+    nombre_pais         varchar(128),
+    constraint fk_presidente foreign key (id_presidente) references presidentes (id_presidente)
+);
+
+-- pendiente crear y probar el modelo de estas dos tablas en django
+
+-- 2. ejercicio : caso uno a muchos
+-- en este caso tengo un usuario que realiza muchas compras, una compra solo puede estar asociada a un unico usuario y un usuario puede tener muchas compras
+-- la tabla ususarios no esta ligada a otra para existir, dado que un usuario no debe tener una primera compra necesariamente
+
+create table user(
+    id_user             int primary key,
+    nombre_usuario      varchar(128) not null,
+    cedula_user         int not null
+);
+
+create table compra(
+    id_compra           int primary key,
+    id_user             int primary key,
+    numero_factura      int not null,
+    nombre_vendedor     varchar(128),
+    constraint fk_user foreign key (id_user) references user (id_user) 
+);
+
+-- pendiente crear modelo y probar el mismo en django
+
+--3. ejericicio: caso muchos a muchos simple
+-- en este caso tenemos una tienda con usuarios y productos
+-- un usuario puede existir en la tienda sin poseer algun producto y un producto existe en la tienda sin que alguien lo compre
+
+create table user(
+    id_user             int primary key,
+    nombre_user         varchar(128) not null,
+    ciudad_user         varchar(128)     
+);
+
+create table producto(
+    id_producto         int primary key,
+    nombre_producto     varchar(128) not null,
+    marca_producto         varchar(128) not null
+);
+
+-- tabla intermedia
+
+create table user_producto(
+    id_user             int primary key,
+    id_producto         int primary key,
+    constraint fk_user foreign key (id_user) references user (id_user),
+    constraint fk_producto foreign key (id_producto) references producto (id_producto)  
+);
+
+-- pendiente crear modelo con django de este caso para muchos a mcuhos
+
+-- 4 ejericicio: caso muchos a muchos con dependencia de existencia
+
+-- en este caso un artista puede crear un disco y un disco puede estar hecho por varios artistas
+-- en este caso un artista puede existir sin un disco, pero un disco no puede existir sin un artista
+
+create table artista(
+    id_artista      int primary key,
+    nombre_artista  varchar(128) not null,
+    ciudad_artista  varchar(128) not null
+);
+
+create table disco(
+    id_disco        int primary key,
+    id_dueno        int primary key, 
+    nombre_disco    varchar(128) not null,
+    release_date    varchar(32) not null,
+    constraint fk_dueno foreign key (id_dueno) references artista (id_artista)
+);
+
+-- tabla intermedia para crear varios duenos para los discos
+
+create table artista_disco(
+    id_artista      int primary key,
+    id_disco        int primary key,
+    constraint fk_dueno foreign key (id_artista) references artista (id_artista),
+    constraint fk_dico foreign key (id_disco) references disco (id_disco)
+);
+
+-- pendiente crear modelo y verificar si esta bien con tutor
+
+
+-- 5. ejericcio: 
+-- existen partidos,
+-- existen jugadores,
+-- existen equipos,
+-- caracteristicas de jugadores:
+    -- pueden jugar en varios partidos
+    -- pueden pertenecer a un unico equipo o a ninguno
+-- equipo puede tener muchos jugadores
+-- partido no se relaciona con equipos, solo con jugadores y sus goles anotados
+
+-- relaciones:
+    -- equipos (1:m) jugadores
+    -- partido (n:m) jugadores, debe saberse cuantos goles anota un jugador en un partido
+
+create table equipos(
+    id_equipo       int primary key,
+    nombre_equipo   varchar(128) not null 
+);
+
+create table jugador(
+    id_jugador      int primary key,
+    id_equipo       int,
+    nombre_jugador  varchar(128) not null,
+    constraint fk_equipo foreign key (id_equipo) references equipos (id_equipo)
+);
+
+create table partidos(
+    id_partido      int primary key,
+    nombre_partido  varchar(128) not null,
+    coliseo         varchar(128) not null
+);
+
+-- tabla intermedia partidos jugadores
+
+create table jugadores_partidos(
+    id_partido 
+)
